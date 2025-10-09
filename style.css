@@ -40,7 +40,7 @@ input[type=number]{ -moz-appearance:textfield }
 /* ====== Header mini cards di presentasi/report ====== */
 .cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:12px 0 18px}
 .card .k{font-size:11px;color:var(--muted)}
-.card .v{font-size:16px;font-weight:700}
+.card .v{font-size:14px;font-weight:700}
 
 /* ====== Badge (LONG/SHORT/TP/SL) ====== */
 .badge{
@@ -74,14 +74,14 @@ table.meta td{
   text-align:center;vertical-align:middle;
 }
 table.meta td.k{width:28%;color:#9fb1c5;font-size:12px;font-weight:500}
-table.meta td.v{font-weight:600;font-size:14px}  /* >>> kecilkan angka */
+table.meta td.v{font-weight:600;font-size:12px}  /* >>> kecilkan angka */
 table.meta td.v.pos{color:var(--pos)}
 table.meta td.v.neg{color:var(--neg)}
 
 /* ====== Evaluasi box ====== */
 .eval{
   background:#0c172a;border:1px solid var(--line);
-  border-radius:8px;padding:10px 12px;min-height:100px;font-size:13px
+  border-radius:8px;padding:10px 12px;min-height:100px;font-size:12px
 }
 
 /* ====== Progress bar probabilitas ====== */
