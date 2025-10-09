@@ -114,3 +114,11 @@ table.meta td.v.neg{color:var(--neg)}
   body{background:#fff;color:#000}
   .card,.block,.thumb,.eval{background:#fff;border-color:#ddd}
 }
+/* Override ukuran angka di kotak data (Entry/TP/Equity/P&L) */
+.card table.meta td.v,
+.block table.meta td.v,
+table.meta td.v {
+  font-size: 5px;     /* atur di sini */
+  font-weight: 100;    /* kalau mau tidak terlalu tebal */
+}
+
