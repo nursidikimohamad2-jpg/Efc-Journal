@@ -1,21 +1,116 @@
-/* --- Extracted from index.html --- */
+/* ====== Theme & base ====== */
+:root{
+  --bg:#0b1220; --panel:#0f172a; --text:#e2e8f0; --muted:#94a3b8;
+  --line:rgba(255,255,255,.08); --pos:#10b981; --neg:#f43f5e;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:linear-gradient(#0b1220,#0a1020);
+  color:var(--text);
+  font:14px/1.45 Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,sans-serif;
+}
 
-    body{font-family:Inter,ui-sans-serif,system-ui}
-    /* hilangkan spin input number */
-    input[type=number]::-webkit-outer-spin-button,
-    input[type=number]::-webkit-inner-spin-button{ -webkit-appearance: none; margin:0 }
-    input[type=number]{ -moz-appearance:textfield }
-    /* drag-over effect */
-    .drop-active{outline:2px dashed rgba(16,185,129,.8); outline-offset: 4px}
-  
+/* hilangkan spin input number */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0 }
+input[type=number]{ -moz-appearance:textfield }
 
-/* --- Extracted from index.report.plus.v7.html --- */
+/* drag-over effect untuk drop area */
+.drop-active{outline:2px dashed rgba(16,185,129,.8); outline-offset:4px}
 
-    body{font-family:Inter,ui-sans-serif,system-ui}
-    /* hilangkan spin input number */
-    input[type=number]::-webkit-outer-spin-button,
-    input[type=number]::-webkit-inner-spin-button{ -webkit-appearance: none; margin:0 }
-    input[type=number]{ -moz-appearance:textfield }
-  
+/* ====== Layout umum / cards ====== */
+.wrap,.container{max-width:1180px;margin:0 auto;padding:24px}
+.grid{display:grid;gap:12px}
+.g-2{grid-template-columns:repeat(2,1fr)}
+.g-3{grid-template-columns:repeat(3,1fr)}
+.g-4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:900px){ .g-2,.g-3,.g-4{grid-template-columns:1fr} }
 
-${css}
+.card,.block{
+  background:rgba(15,23,42,.9);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:12px;
+}
+.header,h1{font-size:20px;margin:0 0 8px}
+.muted{color:var(--muted)}
+.pos{color:var(--pos)} .neg{color:var(--neg)}
+
+/* ====== Header mini cards di presentasi/report ====== */
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:12px 0 18px}
+.card .k{font-size:11px;color:var(--muted)}
+.card .v{font-size:16px;font-weight:700}
+
+/* ====== Badge (LONG/SHORT/TP/SL) ====== */
+.badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:.15rem .5rem;border-radius:999px;border:1px solid var(--line);
+  font-size:11px;color:var(--muted)
+}
+.badge.LONG{background:#032a3a;color:#aee;border-color:#0ea5e9}
+.badge.SHORT{background:#3a1a1a;color:#ffd6d6;border-color:#f97316}
+.badge.TP1,.badge.TP2,.badge.TP3{background:rgba(16,185,129,.1);color:#a7f3d0;border-color:#10b981}
+.badge.SL{background:rgba(244,63,94,.1);color:#fecaca;border-color:#f43f5e}
+
+/* ====== Chart / gambar “Sebelum–Sesudah” ====== */
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:900px){ .row{grid-template-columns:1fr} }
+
+.thumb{
+  background:#0b1628;border:1px solid var(--line);
+  height:380px;              /* >>> perbesar chart */
+  border-radius:12px;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.thumb>img{max-width:100%;max-height:100%;object-fit:contain}
+.cap,.caption{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* ====== Tabel meta (kotak-kotak angka di bawah chart) ====== */
+table.meta{width:100%;border-collapse:separate;border-spacing:0 6px}
+table.meta td{
+  background:#0f172a;border:1px solid var(--line);
+  border-radius:10px;padding:6px 8px;       /* >>> lebih ramping */
+  text-align:center;vertical-align:middle;
+}
+table.meta td.k{width:28%;color:#9fb1c5;font-size:12px;font-weight:500}
+table.meta td.v{font-weight:600;font-size:14px}  /* >>> kecilkan angka */
+table.meta td.v.pos{color:var(--pos)}
+table.meta td.v.neg{color:var(--neg)}
+
+/* ====== Evaluasi box ====== */
+.eval{
+  background:#0c172a;border:1px solid var(--line);
+  border-radius:8px;padding:10px 12px;min-height:100px;font-size:13px
+}
+
+/* ====== Progress bar probabilitas ====== */
+.bar{height:8px;background:#0b7180;border-radius:3px;overflow:hidden}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,#0ea5e9,#10b981)}
+
+/* ====== Table (daftar trade) ====== */
+.table{width:100%;border-collapse:separate;border-spacing:0}
+.table th,.table td{padding:10px 12px;border-bottom:1px solid var(--line)}
+.table tr:hover{background:rgba(255,255,255,.03)}
+.table .num{text-align:right}
+
+/* ====== Buttons ====== */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#0c172a;border:1px solid var(--line);color:var(--text);
+  padding:8px 12px;border-radius:10px;cursor:pointer;transition:.15s;
+}
+.btn:hover{filter:brightness(1.06)}
+.btn.primary{background:#0e9f6e;border-color:#0e9f6e;color:#fff}
+.btn.danger{background:#ef4444;border-color:#ef4444;color:#fff}
+
+/* ====== Modal generik ====== */
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.45)}
+.modal.show{display:flex}
+.modal .dialog{background:rgba(15,23,42,.98);border:1px solid var(--line);border-radius:14px;padding:16px;width:min(700px,92vw)}
+
+/* ====== Print ====== */
+@media print{
+  body{background:#fff;color:#000}
+  .card,.block,.thumb,.eval{background:#fff;border-color:#ddd}
+}
