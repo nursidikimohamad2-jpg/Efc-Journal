@@ -1,0 +1,21 @@
+/* --- Extracted from index.html --- */
+
+    body{font-family:Inter,ui-sans-serif,system-ui}
+    /* hilangkan spin input number */
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button{ -webkit-appearance: none; margin:0 }
+    input[type=number]{ -moz-appearance:textfield }
+    /* drag-over effect */
+    .drop-active{outline:2px dashed rgba(16,185,129,.8); outline-offset: 4px}
+  
+
+/* --- Extracted from index.report.plus.v7.html --- */
+
+    body{font-family:Inter,ui-sans-serif,system-ui}
+    /* hilangkan spin input number */
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button{ -webkit-appearance: none; margin:0 }
+    input[type=number]{ -moz-appearance:textfield }
+  
+
+${css}
