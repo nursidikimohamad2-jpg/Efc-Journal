@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RR Journal — Projects</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-slate-100">
+  <div class="max-w-6xl mx-auto p-4 md:p-8">
+    <h1 class="text-2xl md:text-3xl font-semibold tracking-tight mb-6">RR Journal — Projects</h1>
+
+    <!-- ===== Form Tambah ===== -->
+    <section class="rounded-2xl bg-slate-900/70 ring-1 ring-white/10 shadow-2xl shadow-black/20 backdrop-blur p-6 mb-8">
+      <h2 class="text-xl font-semibold mb-4">Tambah Trade</h2>
+
+      <form id="tradeForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label class="text-sm text-slate-400">Symbol</label>
+          <input id="symbol" name="symbol" placeholder="XAUUSD"
+                 class="w-full bg-slate-900/70 border border-slate-700 rounded-xl px-3 py-2 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500" />
+        </div>
+        <div>
+          <label class="text-sm text-slate-400">Side</label>
+          <select name="side"
+                  class="w-full bg-slate-900/70 border border-slate-700 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500">
+            <option>LONG</option><option>SHORT</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm text-slate-400">Tanggal</label>
+          <input type="datetime-local" name="setup_date"
+                 class="w-full bg-slate-900/70 border border-slate-700 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500" />
+        </div>
+
+        <div>
+          <label class="text-sm text-slate-400">Entry</label>
+          <input name="entry_price" type="number" step="0.0001"
+                 class="w-full bg-slate-900/70 border border-slate-700 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500" />
+        </div>
+        <div>
+          <label class="text-sm text-slate-400">Stop Loss</label>
+          <input name="stop_loss" type="number" step="0.0001"
+                 class="w-full bg-slate-900/70 border border-slate-700 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500" />
+        </div>
+        <div>
+          <label class="text-sm text-slate-400">Catatan (opsional)</label>
+          <input name="note" placeholder="setup/strategi"
+                 class="w-full bg-slate-900/70 border border-slate-700 rounded-xl px-3 py-2 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500" />
+        </div>
+
+        <!-- preview harga -->
+        <div class="md:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-slate-900/60 ring-1 ring-white/10 rounded-xl p-3 shadow-sm">
+            <div class="text-slate-400 text-sm">Jarak Entry-SL</div>
+            <div id="rPoint" class="text-lg font-semibold">0.00</div>
+          </div>
+          <div class="bg-slate-900/60 ring-1 ring-white/10 rounded-xl p-3 shadow-sm">
+            <div class="text-slate-400 text-sm">TP1 (harga)</div>
+            <div id="tp1Display" class="text-lg font-semibold">0.00</div>
+          </div>
+          <div class="bg-slate-900/60 ring-1 ring-white/10 rounded-xl p-3 shadow-sm">
+            <div class="text-slate-400 text-sm">TP2 (harga)</div>
+            <div id="tp2Display" class="text-lg font-semibold">0.00</div>
+          </div>
+          <div class="bg-slate-900/60 ring-1 ring-white/10 rounded-xl p-3 shadow-sm">
+            <div class="text-slate-400 text-sm">TP3 (harga)</div>
+            <div id="tp3Display" class="text-lg font-semibold">0.00</div>
+          </div>
+        </div>
+
+        <!-- probabilitas + total -->
+        <div class="md:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4 mt-3">
+          <div class="bg-slate-900/60 ring-1 ring-white/10 rounded-xl p-3">
+            <div class="text-slate-400 text-sm">Prob ≥ TP1</div>
+            <div id="pBox1" class="text-2xl font-bold text-emerald-400">0%</div>
+          </div>
+          <div class="bg-slate-900/60 ring-1 ring-white/10 rounded-xl p-3">
+            <div class="text-slate-400 text-sm">Prob ≥ TP2</div>
+            <div id="pBox2" class="text-2xl font-bold text-emerald-400">0%</div>
+          </div>
+          <div class="bg-slate-900/60 ring-1 ring-white/10 rounded-xl p-3">
+            <div class="text-slate-400 text-sm">Prob ≥ TP3</div>
+            <div id="pBox3" class="text-2xl font-bold text-emerald-400">0%</div>
+          </div>
+          <div class="bg-slate-900/60 ring-1 ring-white/10 rounded-xl p-3">
+            <div class="text-slate-400 text-sm">Total Transaksi</div>
+            <div id="totalTxBox" class="text-2xl font-bold">0</div>
+          </div>
+        </div>
+
+        <!-- SIMULASI BALANCE (editable) -->
+        <div class="md:col-span-3 grid grid-cols-2 md:grid-cols-5 gap-4 mt-3">
+          <div class="bg-slate-900/60 ring-1 ring-white/10 rounded-xl p-3">
+            <div class="text-slate-400 text-sm">Modal (USD)</div>
+            <input id="baseInput" type="number" step="0.01" min="0"
+                   class="w-full bg-transparent text-2xl font-semibold focus:outline-none" placeholder="0" />
+          </div>
+          <div class="bg-slate-900/60 ring-1 ring-white/10 rounded-xl p-3">
+            <div class="text-slate-400 text-sm">Risk % / trade</div>
+            <div class="relative">
+              <input id="riskInput" type="number" step="0.01" min="0" max="100"
+                     class="w-full bg-transparent text-2xl font-semibold pr-8 focus:outline-none" placeholder="0" />
+              <span class="absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 text-lg">%</span>
+            </div>
+          </div>
+          <div class="bg-slate-900/60 ring-1 ring-white/10 rounded-xl p-3">
+            <div class="text-slate-400 text-sm">1R (USD)</div>
+            <div id="rValBox" class="text-2xl font-semibold">0.00</div>
+          </div>
+          <div class="bg-slate-900/60 ring-1 ring-white/10 rounded-xl p-3">
+            <div class="text-slate-400 text-sm">Saldo Akhir (sim)</div>
+            <div id="simBalBox" class="text-2xl font-semibold">0.00</div>
+          </div>
+          <div class="bg-slate-900/60 ring-1 ring-white/10 rounded-xl p-3">
+            <div class="text-slate-400 text-sm">P/L (sim)</div>
+            <div id="pnlMoneyBox" class="text-2xl font-semibold">+0.00</div>
+          </div>
+        </div>
+
+        <div class="md:col-span-3 flex gap-3 mt-4">
+          <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl shadow">Simpan</button>
+          <button type="reset" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-xl">Reset</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ===== Daftar + Toolbar bawah ===== -->
+    <section>
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <button id="saveToActiveBtn"
+                class="bg-emerald-700/70 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl shadow hidden">
+          Simpan (—)
+        </button>
+
+        <button id="saveProjectBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl shadow">
+          Simpan Project
+        </button>
+        <button id="openProjectsBtn" class="bg-slate-900/70 ring-1 ring-white/10 px-4 py-2 rounded-xl">
+          Projects
+        </button>
+
+        <div class="ml-auto flex items-center gap-2">
+          <button id="exportBtn" class="bg-slate-900/70 ring-1 ring-white/10 px-3 py-1 rounded-lg">Export JSON</button>
+          <button id="exportHtmlBtn" class="bg-slate-900/70 ring-1 ring-white/10 px-3 py-1 rounded-lg">Export HTML</button>
+          <!-- tombol baru -->
+          <button id="exportDeckBtn" class="bg-slate-900/70 ring-1 ring-white/10 px-3 py-1 rounded-lg">Export Presentasi</button>
+          <label class="bg-slate-900/70 ring-1 ring-white/10 px-3 py-1 rounded-lg cursor-pointer">
+            Import JSON <input id="importInput" type="file" accept="application/json" class="hidden">
+          </label>
+          <button id="clearBtn" class="bg-rose-600 hover:bg-rose-500 text-white px-3 py-1 rounded-lg">Hapus Semua</button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl ring-1 ring-white/10">
+        <table class="min-w-full text-sm">
+          <thead class="bg-slate-900/80 backdrop-blur text-slate-300">
+            <tr>
+              <th class="px-3 py-2 text-left">Tanggal</th>
+              <th class="px-3 py-2 text-left">Symbol</th>
+              <th class="px-3 py-2">Side</th>
+              <th class="px-3 py-2">Entry</th>
+              <th class="px-3 py-2">SL</th>
+              <th class="px-3 py-2">R1</th>
+              <th class="px-3 py-2">R2</th>
+              <th class="px-3 py-2">R3</th>
+              <th class="px-3 py-2">Hasil</th>
+              <th class="px-3 py-2 text-left">Catatan</th>
+              <th class="px-3 py-2">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tradeList" class="divide-y divide-slate-800 bg-slate-950/40"></tbody>
+          <tfoot class="bg-slate-900/70 text-slate-200">
+            <tr>
+              <td class="px-3 py-2 font-semibold" colspan="5">Total (bersusun ke bawah)</td>
+              <td class="px-3 py-2 text-right font-semibold" id="totR1">0</td>
+              <td class="px-3 py-2 text-right font-semibold" id="totR2">0</td>
+              <td class="px-3 py-2 text-right font-semibold" id="totR3">0</td>
+              <td colspan="3"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===== Modal Edit ===== -->
+  <div id="editModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+    <div class="w-[min(720px,95vw)] rounded-2xl shadow-2xl ring-1 ring-slate-300 bg-gradient-to-br from-slate-200 to-slate-300 text-slate-900">
+      <div class="p-6">
+        <h3 class="text-lg font-semibold mb-4">Edit Trade</h3>
+
+        <form id="editForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="hidden" name="id">
+
+          <div class="md:col-span-2">
+            <label class="text-sm text-slate-600">Tanggal Setup</label>
+            <input name="setup_date" type="datetime-local"
+                   class="w-full bg-slate-100 border border-slate-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500" />
+          </div>
+
+          <div>
+            <label class="text-sm text-slate-600">Symbol</label>
+            <input name="symbol"
+                   class="w-full bg-slate-100 border border-slate-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500" />
+          </div>
+          <div>
+            <label class="text-sm text-slate-600">Side</label>
+            <select name="side"
+                    class="w-full bg-slate-100 border border-slate-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500">
+              <option>LONG</option><option>SHORT</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-sm text-slate-600">Entry</label>
+            <input name="entry_price" type="number" step="0.0001"
+                   class="w-full bg-slate-100 border border-slate-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500" />
+          </div>
+          <div>
+            <label class="text-sm text-slate-600">Stop Loss</label>
+            <input name="stop_loss" type="number" step="0.0001"
+                   class="w-full bg-slate-100 border border-slate-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500" />
+          </div>
+
+          <!-- Close info -->
+          <div>
+            <label class="text-sm text-slate-600">Close Date (opsional)</label>
+            <input name="close_date" type="datetime-local"
+                   class="w-full bg-slate-100 border border-slate-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500" />
+          </div>
+          <div>
+            <label class="text-sm text-slate-600">Close Type</label>
+            <select name="close_type"
+                    class="w-full bg-slate-100 border border-slate-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500">
+              <option value="">—</option>
+              <option>TP1</option>
+              <option>TP2</option>
+              <option>TP3</option>
+              <option>SL</option>
+            </select>
+          </div>
+
+          <!-- ===== Lampiran Gambar (Sebelum & Sesudah) ===== -->
+          <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- BEFORE -->
+            <div class="bg-white rounded-xl border border-slate-300 p-3">
+              <div class="text-sm font-medium text-slate-700 mb-2">Gambar Sebelum</div>
+              <label for="editImgBefore" id="dropBefore"
+                     class="block cursor-pointer rounded-lg bg-slate-100 border border-dashed border-slate-300 p-3 text-center text-slate-500">
+                <div class="text-sm">Klik atau drag & drop gambar di sini</div>
+                <div class="text-xs text-slate-400">PNG / JPG / WEBP • maks ~2–3MB</div>
+              </label>
+              <input id="editImgBefore" type="file" accept="image/*" class="hidden">
+              <input type="hidden" name="img_before_data" id="editImgBeforeData">
+              <div class="mt-3 flex items-start gap-3">
+                <img id="editImgBeforePreview" class="hidden w-28 h-28 object-cover rounded-lg ring-1 ring-slate-300" alt="Preview Sebelum">
+                <div class="flex flex-col gap-2">
+                  <button type="button" id="btnClearImgBefore"
+                          class="hidden bg-rose-600 text-white text-sm px-3 py-1 rounded-lg">Hapus</button>
+                  <button type="button" id="btnViewImgBefore"
+                          class="hidden bg-slate-700 text-white text-sm px-3 py-1 rounded-lg">Lihat</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- AFTER -->
+            <div class="bg-white rounded-xl border border-slate-300 p-3">
+              <div class="text-sm font-medium text-slate-700 mb-2">Gambar Sesudah</div>
+              <label for="editImgAfter" id="dropAfter"
+                     class="block cursor-pointer rounded-lg bg-slate-100 border border-dashed border-slate-300 p-3 text-center text-slate-500">
+                <div class="text-sm">Klik atau drag & drop gambar di sini</div>
+                <div class="text-xs text-slate-400">PNG / JPG / WEBP • maks ~2–3MB</div>
+              </label>
+              <input id="editImgAfter" type="file" accept="image/*" class="hidden">
+              <input type="hidden" name="img_after_data" id="editImgAfterData">
+              <div class="mt-3 flex items-start gap-3">
+                <img id="editImgAfterPreview" class="hidden w-28 h-28 object-cover rounded-lg ring-1 ring-slate-300" alt="Preview Sesudah">
+                <div class="flex flex-col gap-2">
+                  <button type="button" id="btnClearImgAfter"
+                          class="hidden bg-rose-600 text-white text-sm px-3 py-1 rounded-lg">Hapus</button>
+                  <button type="button" id="btnViewImgAfter"
+                          class="hidden bg-slate-700 text-white text-sm px-3 py-1 rounded-lg">Lihat</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ===== /Lampiran Gambar ===== -->
+
+        </form>
+
+        <div class="flex justify-end gap-2 mt-5">
+          <button id="editCancel" class="bg-slate-700 text-white hover:bg-slate-600 px-4 py-2 rounded-xl">Batal</button>
+          <button type="submit" form="editForm" class="bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-xl text-white">Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Lightbox Viewer ===== -->
+  <div id="imgViewer" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-[60]">
+    <button id="imgViewerClose" class="absolute top-4 right-4 bg-slate-800 text-white px-3 py-1 rounded-lg">Tutup</button>
+    <img id="imgViewerImg" src="" alt="Lampiran" class="max-w-[90vw] max-h-[85vh] rounded-xl shadow-2xl ring-1 ring-white/10">
+  </div>
+
+  <!-- ===== Modal Projects ===== -->
+  <div id="projectsModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+    <div class="w-[min(720px,95vw)] rounded-2xl shadow-2xl ring-1 ring-white/10 bg-slate-900/90 text-slate-100 backdrop-blur">
+      <div class="p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <h3 class="text-lg font-semibold">Projects</h3>
+          <button id="closeProjects" class="ml-auto bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded-lg">Tutup</button>
+        </div>
+        <div id="projectsList" class="space-y-3 max-h-[60vh] overflow-y-auto"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal Save Project ===== -->
+  <div id="saveProjectModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+    <div class="w-[min(520px,95vw)] rounded-2xl shadow-2xl ring-1 ring-white/10 bg-slate-900/90 text-slate-100 backdrop-blur">
+      <div class="p-6">
+        <h3 class="text-lg font-semibold mb-4">Simpan Project</h3>
+        <div class="space-y-3">
+          <div>
+            <label class="text-sm text-slate-400">Nama Project</label>
+            <input id="saveProjectName" placeholder="Contoh: Backtest XAU H1"
+                   class="w-full bg-slate-900/70 border border-slate-700 rounded-xl px-3 py-2 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500">
+          </div>
+          <div>
+            <label class="text-sm text-slate-400">Deskripsi (opsional)</label>
+            <input id="saveProjectNotes" placeholder="Catatan ringkas project"
+                   class="w-full bg-slate-900/70 border border-slate-700 rounded-xl px-3 py-2 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500">
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 mt-5">
+          <button id="cancelSaveProject" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-xl">Batal</button>
+          <button id="confirmSaveProject" class="bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-xl text-white">Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
