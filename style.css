@@ -122,3 +122,9 @@ table.meta td.v {
   font-weight: 100;    /* kalau mau tidak terlalu tebal */
 }
 
+.card table.meta td.v,
+.block table.meta td.v,
+table.meta td.v {
+  font-size: 2px !important;
+  font-weight: 70 !important;
+}
