@@ -73,8 +73,8 @@ table.meta td{
   border-radius:9px;padding:5px 7px;       /* >>> lebih ramping */
   text-align:center;vertical-align:middle;
 }
-table.meta td.k{width:28%;color:#9fb1c5;font-size:10px;font-weight:500}
-table.meta td.v{font-weight:400;font-size:10px}  /* >>> kecilkan angka */
+table.meta td.k{width:28%;color:#9fb1c5;font-size:10px;font-weight:200}
+table.meta td.v{font-weight:400;font-size:8px}  /* >>> kecilkan angka */
 table.meta td.v.pos{color:var(--pos)}
 table.meta td.v.neg{color:var(--neg)}
 
