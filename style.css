@@ -33,7 +33,7 @@ input[type=number]{ -moz-appearance:textfield }
   border-radius:12px;
   padding:12px;
 }
-.header,h1{font-size:20px;margin:0 0 8px}
+.header,h1{font-size:14px;margin:0 0 8px}
 .muted{color:var(--muted)}
 .pos{color:var(--pos)} .neg{color:var(--neg)}
 
