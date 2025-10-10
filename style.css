@@ -40,7 +40,7 @@ input[type=number]{ -moz-appearance:textfield }
 /* ====== Header mini cards di presentasi/report ====== */
 .cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:12px 0 18px}
 .card .k{font-size:8px;color:var(--muted)}
-.card .v{font-size:8px;font-weight:200}
+.card .v{font-size:40px;font-weight:200}
 
 /* ====== Badge (LONG/SHORT/TP/SL) ====== */
 .badge{
@@ -125,6 +125,6 @@ table.meta td.v {
 .card table.meta td.v,
 .block table.meta td.v,
 table.meta td.v {
-  font-size: 9px !important;
-  font-weight: 200 !important;
+  font-size: 12px !important;
+  font-weight:400 !important;
 }
