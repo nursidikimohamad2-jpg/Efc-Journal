@@ -1269,8 +1269,6 @@ setupDragDrop(dropBefore, editImgBefore, 'before');
 setupDragDrop(dropAfter,  editImgAfter,  'after');
 
 /* ===== (BARU) — Tambah field URL untuk gambar + Paste global ===== */
-let lastImgKind = lastImgKind || 'before'; // default aman
-
 function injectUrlBarUnder(areaEl, kind){
   if(!areaEl) return;
   const id = kind==='before' ? 'editImgBeforeUrl' : 'editImgAfterUrl';
@@ -1278,17 +1276,17 @@ function injectUrlBarUnder(areaEl, kind){
 
   const wrap = document.createElement('div');
   wrap.className = 'mt-2 flex gap-2';
-  wrap.innerHTML = `
-    <input id="${id}" type="url"
-      placeholder="Tempel link gambar (TradingView / .png / .jpg / data:image/…)"
-      class="w-full rounded-xl border border-slate-300 bg-white text-slate-900
-             px-3 py-2 text-sm placeholder-slate-500
-             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
-    <button type="button"
-      class="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-500">
-      Muat
-    </button>
-  `;
+ wrap.innerHTML = `
+  <input id="${id}" type="url" 
+    placeholder="Tempel link gambar (https://… atau data:image/…)" 
+    class="w-full rounded-xl border border-slate-300 bg-white text-slate-900 
+           px-3 py-2 text-sm placeholder-slate-500 
+           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+  <button type="button" 
+    class="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-500">
+    Muat
+  </button>
+`;
 
   areaEl.insertAdjacentElement('afterend', wrap);
 
@@ -1296,28 +1294,15 @@ function injectUrlBarUnder(areaEl, kind){
   const btn   = wrap.querySelector('button');
 
   const loader = async () => {
-    let raw = (input.value||'').trim();
-    if (!raw) { alert('Link kosong.'); return; }
-
-    // terima TradingView share link juga
-    if (!isLikelyImageURL(raw)) {
-      alert('Link tidak valid. Gunakan link gambar langsung (.png/.jpg/.webp) atau link share TradingView.');
-      return;
-    }
-
-    // -> konversi ke base64 (client; fallback proxy Netlify)
-    const b64 = await urlToBase64Smart(raw);
-    if (b64) {
-      setImagePreview(kind, b64);     // ini sekaligus mengisi hidden input *_Data milikmu
-    } else {
-      // fallback terakhir: tetap tampilkan via URL asli (tidak base64) agar user lihat preview
-      const norm = normalizeTradingViewUrl(raw);
-      setImagePreview(kind, norm);
-    }
+    const url = (input.value||'').trim();
+    if (!isLikelyImageURL(url)) { alert('Link tidak valid. Pakai URL file gambar langsung.'); return; }
+    const b64 = await urlToBase64Smart(url);
+    if (b64) setImagePreview(kind, b64);
   };
 
   input.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); loader(); }});
   btn.addEventListener('click', loader);
+
   input.addEventListener('focus', ()=>{ lastImgKind = kind; });
 }
 
@@ -1325,14 +1310,12 @@ function injectUrlBarUnder(areaEl, kind){
 injectUrlBarUnder(dropBefore, 'before');
 injectUrlBarUnder(dropAfter,  'after');
 
-// Global paste: jika ada URL gambar/TradingView di clipboard, muat ke area terakhir yang aktif
+// Global paste: jika ada URL gambar di clipboard, muat ke area terakhir yang aktif
 window.addEventListener('paste', async (e)=>{
   const t = (e.clipboardData || window.clipboardData)?.getData?.('text') || '';
   if (isLikelyImageURL(t)){
-    const raw = t.trim();
-    const b64 = await urlToBase64Smart(raw);
+    const b64 = await urlToBase64Smart(t.trim());
     if (b64) setImagePreview(lastImgKind, b64);
-    else     setImagePreview(lastImgKind, normalizeTradingViewUrl(raw)); // preview via URL jika tetap gagal
   }
 });
 
@@ -1352,3 +1335,4 @@ window.addEventListener('paste', async (e)=>{
   updateActiveProjectUI();
   calcSim();
 })();
+ini adalah kode url di mulai coba and asesuaikan jika ini yg anda maksud
